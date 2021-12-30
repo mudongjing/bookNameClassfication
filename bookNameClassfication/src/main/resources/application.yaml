@@ -1,0 +1,21 @@
+spring:
+  neo4j:
+    uri: 
+    authentication:
+      username: 
+      password: 
+  redis:
+    port: 
+    host: 
+    password: 
+    dbs: 
+  datasource:
+    username: 
+    password: 
+    url: 
+server:
+  port: 
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:/mybatis/*.xml
