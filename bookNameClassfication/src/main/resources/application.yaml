@@ -4,11 +4,6 @@ spring:
     authentication:
       username: 
       password: 
-  redis:
-    port: 
-    host: 
-    password: 
-    dbs: 
   datasource:
     username: 
     password: 
@@ -19,3 +14,8 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
   mapper-locations: classpath:/mybatis/*.xml
+redis:
+  port: 
+  host: 
+  password: 
+  dbs: 
