@@ -18,4 +18,10 @@ public class BookNameServiceImpl implements BookNameService {
         bookNameMapper.insert(book);
         return book.getBookId();
     }
+
+    @Override
+    public String getBookById(int id) {
+        Book book = bookNameMapper.selectByPrimaryKey(id);
+        return book.getBookName();
+    }
 }

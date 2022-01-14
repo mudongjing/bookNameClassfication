@@ -1,12 +1,11 @@
 package com.example.demo.utils.keywordOpt;
 
-
-
+import com.example.demo.pojo.common.LocationOfWord;
 import com.example.demo.pojo.common.Partition;
 import com.example.demo.pojo.keywords.Classfication;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 import static java.lang.Math.*;
@@ -21,27 +20,32 @@ import static java.lang.Math.*;
  */
 @Component
 public class KeywordCal {
-    @Autowired
+    @Resource
     private Classfication classfication;
-    @Autowired
+    @Resource
     private Partition partition;
-    @Autowired
+    @Resource
     private KeywordExt keywordExt;
 
-    public List<String> calculateKeyword(Set<String> words){
-        List<String> result = new ArrayList<>();
+    public Set<LocationOfWord> calculateKeyword(String bookName){
+        Set<LocationOfWord> words = keywordExt.extractWord(bookName);
+        Set<LocationOfWord> result = new HashSet<>();
         // 如果为非汉字，则不参与计算，
-        for (String s:words) {
-            if (keywordExt.isCh(s.charAt(0))){//汉字
-                result.add(calCoordinate(s));
-            }else{ //英文类，直接存储
-                result.add(s);
-            }
+        for (LocationOfWord locationOfWord:words) {
+            String s = locationOfWord.getWord();
+            if (keywordExt.isCh(s.charAt(0)))//汉字
+                result.add(new LocationOfWord(calCoordinate(s),locationOfWord.getLocation(),true));
+            else //英文类，直接存储
+                result.add(new LocationOfWord(s,locationOfWord.getLocation(),false));
         }
         return result;
     }
+
+
+
+
     // s 为两个字，利用这两个字，计算坐标
-    private String calCoordinate(String s){//针对汉字
+    public String calCoordinate(String s){//针对汉字
         int x=0,y=0;
         x = bernstein(s.charAt(0)) % classfication.getCoordi();
         y = bernstein(s.charAt(1)) % classfication.getCoordi();
@@ -69,8 +73,8 @@ public class KeywordCal {
         return degree;
     }
 
-    private int calculatePartition(double target,double capcity,int partition){
-        double delta = capcity / partition;
+    private int calculatePartition(double target,double capacity,int partition){
+        double delta = capacity / partition;
 
         if (target<delta) return 0;
         else if (target >= (partition-1)*delta) return partition-1;
